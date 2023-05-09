@@ -1,11 +1,19 @@
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 
 
 export default function Crypto({ data }) {
+  const { locale, locales, push } = useRouter()
+  const {t:translate} = useTranslation('crypto')
   const router = useRouter();
   console.log(data);
+
+  const handleClick = l => () => {
+    push('/cryptos/usd', undefined, {locale:l})
+  }
 
   return (
     <div className="page">
@@ -45,9 +53,11 @@ export default function Crypto({ data }) {
         </div>
         <div className="language">
             <h2>Language</h2>
-            <button>English</button>
-            <button>Korean</button>
-            <button>Chinese</button>
+            {locales.map(l => (
+            <button key = {l} onClick={handleClick(l)}>
+            {l}
+            </button>
+        ))}
 
         </div>
     </div>
@@ -63,4 +73,12 @@ export async function getServerSideProps(context) {
   return {
     props: { data },
   };
+}
+
+export async function getStaticProps({locale}) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['crypto'])),
+    },
+  }
 }

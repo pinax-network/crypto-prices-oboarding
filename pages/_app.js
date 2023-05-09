@@ -1,8 +1,10 @@
 import '@/styles/globals.css'
 import "./cryptopagestyle.css"
+import { appWithTranslation } from 'next-i18next'
 
 
-
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
+
+export default appWithTranslation(App)

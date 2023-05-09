@@ -63,3 +63,11 @@ export async function getServerSideProps(context) {
     props: { data },
   };
 }
+
+export async function getStaticProps({locale}) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['crypto'])),
+    },
+  }
+}
